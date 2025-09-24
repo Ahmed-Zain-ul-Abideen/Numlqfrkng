@@ -1,16 +1,25 @@
-# Use Foundry’s official image (includes anvil, forge, cast)
-FROM ghcr.io/foundry-rs/foundry:latest
+# Start from Node.js base image (includes npm)
+FROM node:22-slim
 
-# Install Node.js (for fork.js)
-RUN apt-get update && apt-get install -y curl && \
-    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
-    apt-get install -y nodejs
+# Install dependencies for Foundry
+RUN apt-get update && apt-get install -y \
+    curl git build-essential pkg-config libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Foundry (includes anvil, forge, cast)
+RUN curl -L https://foundry.paradigm.xyz | bash && \
+    /root/.foundry/bin/foundryup
+
+# Add Foundry binaries to PATH
+ENV PATH="/root/.foundry/bin:${PATH}"
+
+# Set work directory
+WORKDIR /app
 
 # Copy project files
-WORKDIR /app
 COPY package.json .
 COPY fork.js .
 RUN npm install
 
-# Default command (start anvil fork via fork.js)
+# Default command
 CMD ["npm", "start"]
