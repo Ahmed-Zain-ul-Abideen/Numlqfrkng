@@ -22,4 +22,4 @@ COPY fork.js .
 RUN npm install
 
 # Default command
-CMD ["npm", "start"]
+CMD ["node", "fork.js"]
