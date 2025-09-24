@@ -20,7 +20,13 @@ console.log("   Block     :", block);
 //const args = ["--fork-url", rpc, "--fork-block-number", block];
 
 // adding some accounts to unlock
-const args = ["--fork-url", rpc, "--fork-block-number", block,"--auto-impersonate"];
+const args = [
+  "--fork-url", rpc,
+  "--fork-block-number", block,
+  "--auto-impersonate",
+  "--host", "0.0.0.0",   // 👈 expose to the external world
+  "--port", "8545"       // 👈 use Render's port for communication
+];
 
 
 
